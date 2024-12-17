@@ -8,7 +8,8 @@ import { selectCurrentToken } from "./features/auth/authSlice";
 import { useEffect } from "react";
 
 function App() {
-  const token = useSelector(selectCurrentToken);
+  const token = useSelector(selectCurrentToken) || localStorage.getItem("accessToken");
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,13 +18,16 @@ function App() {
     }
   }, [token, navigate]);
 
+
   return (
     <Routes>
       <Route element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
       </Route>
+
+      {/*  Private Routes */}
       <Route element={<MainLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
   );
