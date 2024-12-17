@@ -1,11 +1,31 @@
-import { Button } from "@/components/ui/button";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Dashboard from "./features/dashboard/Dashboard";
+import MainLayout from "./components/layout/MainLayout";
+import AuthLayout from "./components/layout/AuthLayout";
+import Login from "./features/auth/Login";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "./features/auth/authSlice";
+import { useEffect } from "react";
 
 function App() {
+  const token = useSelector(selectCurrentToken);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
   return (
-    <main className="text-xl ">
-      <h1 className="text-red-500">Hello</h1>
-      <Button>Hello</Button>
-    </main>
+    <Routes>
+      <Route element={<AuthLayout />}>
+        <Route path="login" element={<Login />} />
+      </Route>
+      <Route element={<MainLayout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+    </Routes>
   );
 }
 
