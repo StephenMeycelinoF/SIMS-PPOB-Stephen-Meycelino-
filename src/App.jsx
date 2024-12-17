@@ -1,30 +1,18 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Dashboard from "./features/dashboard/Dashboard";
 import MainLayout from "./components/layout/MainLayout";
 import AuthLayout from "./components/layout/AuthLayout";
 import Login from "./features/auth/Login";
-import { useSelector } from "react-redux";
-import { selectCurrentToken } from "./features/auth/authSlice";
-import { useEffect } from "react";
+
+import Registration from "./features/auth/Register";
 
 function App() {
-  const token = useSelector(selectCurrentToken) || localStorage.getItem("accessToken");
-  
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-  }, [token, navigate]);
-
-
   return (
     <Routes>
       <Route element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
+        <Route path="register" element={<Registration />} />
       </Route>
-
       {/*  Private Routes */}
       <Route element={<MainLayout />}>
         <Route path="dashboard" element={<Dashboard />} />
