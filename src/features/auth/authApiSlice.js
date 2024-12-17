@@ -9,6 +9,18 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...credentials },
       }),
     }),
+    transformResponse: (response) => {
+      if (response?.data?.token) {
+        const decodedToken = JSON.parse(
+          atob(response.data.token.split(".")[1])
+        );
+        const expiration = new Date(decodedToken.exp * 1000);
+        if (expiration <= new Date()) {
+          throw new Error("Token expired");
+        }
+      }
+      return response;
+    },
     register: builder.mutation({
       query: (userData) => ({
         url: "/registration",
